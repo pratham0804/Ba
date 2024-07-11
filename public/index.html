@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo List</title>
+
+  <style>
+
+    body {
+      font-family:Poppins, Helvetica, sans-serif;
+      background: #7474BF;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    }
+
+    .container {
+      border-width: 1px;
+      border-color: rgb(96,96,96);
+      box-shadow: 0 0 12px rgba(0,0,0,0.5);
+      border-radius: 10px;
+      width: 600px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50% , -50%);
+      background-color: white;
+      
+     
+    }
+    .title {
+      font-family:Poppins, Helvetica, sans-serif;
+      color: rgb(0, 0, 39);
+      font-size: 25px;
+      margin-left: 30px;
+      font-weight: bold;
+    }
+
+    .input-task{
+      
+      width: 60%;
+      height: 31px;
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+      padding-left: 12px;
+      border: none;
+      border-width: 1px;
+      border-color: rgb(218, 213, 213);
+      border-style: solid;
+      border-right: none;
+      display: block;
+      
+    }
+    .Add-btn {
+      height: 37px;
+      width: 80px;
+      border-radius: 30px;
+      padding: 10px 10px;
+     background-color: orange;
+     color: white;
+     border: none;
+     margin-left: -14px;
+     
+      
+
+    }
+    .input-tag {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      
+    }
+    .tasks {
+      display: grid;
+      grid-template-columns: 150px 1fr 150px;
+      margin-bottom: 15px;
+    
+    }
+    
+    .createdtasks {
+      margin-left: 80px;
+      font-size: medium;
+    }
+
+    .delete { 
+      font-size: 12px;
+      border: none;
+      }
+    
+    
+
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+      <p class="title">
+        To-Do List
+      </p>
+  
+      <div class="input-tag">
+        <input type="text" class="input-task" placeholder="Add your task"> 
+       <button class="Add-btn">Add</button>
+       
+      </div>
+
+      <div class="tasks">
+
+      </div>
+      
+  </div>
+
+
+
+
+  <script >
+
+let  taskList = JSON.parse(localStorage.getItem('pending-tasks')) || [];
+     // jitna local storage me hai utna display kara do page pr 
+     generateHtml();
+
+     const addbtn =  document.querySelector('.Add-btn');
+
+     
+    addbtn.addEventListener('click' , printtasks);
+
+
+    document.querySelector('.input-task').addEventListener('keydown', (event) => {
+        if(event.key === 'Enter'){
+          printtasks();
+        }
+     });
+
+     function printtasks() {
+        let inputValue = document.querySelector('.input-task').value;
+        if(inputValue){
+          taskList.push(inputValue);
+
+        localStorage.setItem('pending-tasks',JSON.stringify(taskList)); 
+
+        generateHtml();
+        document.querySelector('.input-task').value = '';
+        }
+        
+
+     };
+    
+
+    
+
+    
+
+     
+     
+
+
+
+     function generateHtml(){
+      // creating html 
+      let createdhtml = '' ; 
+      taskList.forEach((value,index) =>{
+        createdhtml += `<p class="createdtasks">${value}</p> <span> </span>
+        <button onclick="
+        taskList.splice(${index},1);
+        generateHtml();
+        " class="delete"> &#10005;</button>`;
+
+        
+
+     });  
+
+     document.querySelector('.tasks').innerHTML = createdhtml ;
+    
+     }
+     
+
+  </script>
+</body>
+</html>
